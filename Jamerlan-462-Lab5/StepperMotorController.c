@@ -4,7 +4,7 @@
 // Jonathan Valvano
 // January 18, 2019
 
-/** Modified by Marc Julian Jamerlan on 10-22-2019 **/ 
+/** Modified by Marc Julian Jamerlan on 10-24-2019 **/ 
 
 // Hardware connections (External: two input buttons and four outputs to stepper motor)
 //  PA5 is Wash input  (1 means pressed, 0 means not pressed)
@@ -139,10 +139,10 @@ void Port_Init(void)
 	GPIO_PORTE_DEN_R = 0x3F; 	
 	// Port F init
 	GPIO_PORTF_LOCK_R = 0x4C4F434B;
-	GPIO_PORTF_CR_R = 0x01;  // unlock PF1
-	GPIO_PORTF_DIR_R = 0x01; // PF1 output 
-	GPIO_PORTF_PUR_R = 0x01; // enable pullup on PF1
-	GPIO_PORTF_DEN_R = 0x01; 	
+	GPIO_PORTF_CR_R = 0x02;  // unlock PF1
+	GPIO_PORTF_DIR_R = 0x02; // PF1 output 
+	GPIO_PORTF_PUR_R = 0x02; // enable pullup on PF1
+	GPIO_PORTF_DEN_R = 0x02; 	
 }
 
 uint32_t swapBits(uint32_t bits)
@@ -165,12 +165,13 @@ int main(void){
   EnableInterrupts();   
   while(1){
 		// output
-		GPIO_PORTF_DATA_R = 0x01; // heartbeat
+		GPIO_PORTF_DATA_R = 0x00; // heartbeat on
 		GPIO_PORTE_DATA_R = pt->w_out; // send to PE0-4
 		GPIO_PORTE_DATA_R |= pt->l_out << 5; // send to PE5
-			
+		GPIO_PORTF_DATA_R = 0x02; // heartbeat off
 		SysTick_Wait10ms(pt->delay); // wait
-		in = swapBits((GPIO_PORTA_DATA_R >> 5) & 0x03); // input
+		GPIO_PORTF_DATA_R = 0x00; // heartbeat on
+		in = swapBits((GPIO_PORTA_DATA_R >> 4) & 0x03); // input
 		pt = pt->next[in]; // next				
   }
 }
