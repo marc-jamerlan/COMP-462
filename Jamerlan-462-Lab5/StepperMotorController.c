@@ -140,7 +140,7 @@ void Port_Init(void)
 	// Port F init
 	GPIO_PORTF_LOCK_R = 0x4C4F434B;
 	GPIO_PORTF_CR_R = 0x01;  // unlock PF1
-	GPIO_PORTF_DIR_R = 0x00; 
+	GPIO_PORTF_DIR_R = 0x01; // PF1 output 
 	GPIO_PORTF_PUR_R = 0x01; // enable pullup on PF1
 	GPIO_PORTF_DEN_R = 0x01; 	
 }
@@ -165,8 +165,10 @@ int main(void){
   EnableInterrupts();   
   while(1){
 		// output
+		GPIO_PORTF_DATA_R = 0x01; // heartbeat
 		GPIO_PORTE_DATA_R = pt->w_out; // send to PE0-4
-		GPIO_PORTE_DATA_R |= pt->l_out << 5; // send to PE5		
+		GPIO_PORTE_DATA_R |= pt->l_out << 5; // send to PE5
+			
 		SysTick_Wait10ms(pt->delay); // wait
 		in = swapBits((GPIO_PORTA_DATA_R >> 5) & 0x03); // input
 		pt = pt->next[in]; // next				
