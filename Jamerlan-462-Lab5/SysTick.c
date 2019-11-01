@@ -2,7 +2,7 @@
 // Runs on TM4C123
 // Provide functions that initialize the SysTick module
 
-/** Modified by Marc Julian Jamerlan on 10-18-2019 **/ 
+/** Modified by Marc Julian Jamerlan on 10-21-2019 **/ 
 
 // October 5, 2018
 
@@ -43,7 +43,8 @@ void SysTick_Wait(uint32_t delay){
 // The delay parameter is in ms.
 // 80000 bus cycles equals 1ms
 void SysTick_Wait1ms(uint32_t delay){
-	for(unsigned long i = 0; i < delay; i++)
+	unsigned long i;
+	for(i = 0; i < delay; i++)
 	{
 		SysTick_Wait(80000); 
 	}
@@ -51,7 +52,8 @@ void SysTick_Wait1ms(uint32_t delay){
 
 // 800000 bus cycles equals 10ms
 void SysTick_Wait10ms(uint32_t delay){
-		for(unsigned long i = 0; i < delay; i++)
+	unsigned long i;
+	for(i = 0; i < delay; i++)
 	{
 		SysTick_Wait(800000); 
 	}
